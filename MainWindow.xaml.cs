@@ -18,6 +18,21 @@ using System.Collections.ObjectModel;
 
 namespace WpfApp1
 {
+    public class TowerObject {
+
+        public int Disk0 { get; set; }
+        public int Disk1 { get; set; }
+        public int Disk2 { get; set; }
+
+    }
+
+    public class TodoItem
+    {
+        public string Title { get; set; }
+        public int Completion { get; set; }
+    }
+
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -28,7 +43,7 @@ namespace WpfApp1
         //Towers of Hanoi
         Hanoi HanoiObj;
 
-        public MainWindow()
+    public MainWindow()
         {
             InitializeComponent();
 
@@ -39,14 +54,29 @@ namespace WpfApp1
             //Default Initialize the Hanoi Tower
             HanoiObj = new Hanoi(3);
             Display_Towers_Status_Message(null, null);
-            
-            //Hook up our HanoiObj Towers to an ObservableCollection to automatically update
-            ObservableTowers = new ObservableCollection<Stack<int>>()
+
+            //Set up an automatically updating Hanoi Tower view
+            var myTowers0 = new int[] { 3, 2, 1 };//HanoiObj.Towers[0].ToArray();
+            var myTowers1 = new int[] { 5, 3, 4 };//HanoiObj.Towers[1].ToArray();
+            int[] myTowers2 = new int[] { 0, 0, 0 };//HanoiObj.Towers[2].ToArray();
+
+            List<TowerObject> ListOfTowers = new List<TowerObject>
             {
-                HanoiObj.Towers[0],
-                HanoiObj.Towers[1],
-                HanoiObj.Towers[2]
+                new TowerObject { Disk0 = myTowers0[0], Disk1 = myTowers0[1], Disk2 = myTowers0[2] },
+                new TowerObject { Disk0 = myTowers1[0], Disk1 = myTowers1[1], Disk2 = myTowers1[2] },
+                new TowerObject { Disk0 = myTowers2[0], Disk1 = myTowers2[1], Disk2 = myTowers2[2] }
             };
+
+            icTowersList.ItemsSource = ListOfTowers;
+
+
+            List<TodoItem> items = new List<TodoItem>();
+            items.Add(new TodoItem() { Title = "Complete this WPF tutorial", Completion = 45 });
+            items.Add(new TodoItem() { Title = "Learn C#", Completion = 80 });
+            items.Add(new TodoItem() { Title = "Wash the car", Completion = 0 });
+
+            icTodoList.ItemsSource = items;
+
         }
 
         // When the button is clicked it closes the window

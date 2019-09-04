@@ -56,15 +56,41 @@
         <!-- The Towers themselves are displayed below-->
         <TextBlock Name ="TowersSolution" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Here Is The Solution" VerticalAlignment="Top" FontSize="30"/>
         <Border Background="LightBlue" BorderBrush="Black" BorderThickness="2" CornerRadius="45" Padding="25"></Border>
-        <ListView x:Name="lstNames" Margin="5,5,5,5" Grid.Column="1" Grid.Row="0" Width="200" Height="100">
-            <ListView.View>
-                <GridView x:Name="grdNames">
-                    <GridViewColumn Header="Tower 1"  DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Tower 2"  DisplayMemberBinding="{Binding Address}"/>
-                    <GridViewColumn Header="Tower 3" HorizontalAlignment="Left" DisplayMemberBinding="{Binding Address}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Grid Margin="10">
+            <TextBlock Name ="testblock" Text="Here is a grid block"></TextBlock>
+            <ItemsControl Name="icTowersList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Disk0}" />
+                            <TextBlock Text="{Binding Disk1}" />
+                            <TextBlock Text="{Binding Disk2}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+        <Grid Margin="10">
+            <ItemsControl Name="icTodoList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Title}" />
+                            <ProgressBar Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding Completion}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
 
 
     </StackPanel>
