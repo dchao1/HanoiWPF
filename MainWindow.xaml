@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:WpfApp1"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="600" Width="1000"
         Topmost="False" WindowState="Normal" MouseMove="Window_MouseMove">
 
     <!-- You can store data as a resource and reuse it by adding this
@@ -24,6 +24,11 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontFamily" Value="Consolas"/>
         </Style>
+
+        <LinearGradientBrush EndPoint="1,0" x:Key="poleFill">
+            <GradientStop Color="Black" Offset="0" />
+            <GradientStop Color="LightGray" Offset="1" />
+        </LinearGradientBrush>
     </Window.Resources>
 
 
@@ -31,7 +36,7 @@
     <StackPanel Orientation="Vertical">
 
         <!-- This is where your content goes -->
-        <TextBlock Name ="Logo" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Towers Of Hanoi Solver" VerticalAlignment="Top" FontSize="40"/>
+        <TextBlock Name ="Logo" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Towers Of Hanoi Solver" VerticalAlignment="Top" FontSize="33"/>
 
         <!-- Stackpanel for the buttons-->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -49,50 +54,27 @@
 
             <!-- Activates the next move; update the display automatically -->
             <Button x:Name="BtnNextMove" Height="40" Width="150" HorizontalAlignment="Center" Content="NextMove" Click="ButtonNextMoveClicked" />
-
         </StackPanel>
 
-
-        <!-- The Towers themselves are displayed below-->
+        <!-- just a bit of text-->
         <TextBlock Name ="TowersSolution" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Here Is The Solution" VerticalAlignment="Top" FontSize="30"/>
-        <Border Background="LightBlue" BorderBrush="Black" BorderThickness="2" CornerRadius="45" Padding="25"></Border>
-        <Grid Margin="10">
-            <TextBlock Name ="testblock" Text="Here is a grid block"></TextBlock>
-            <ItemsControl Name="icTowersList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,0,0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="100" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Disk0}" />
-                            <TextBlock Text="{Binding Disk1}" />
-                            <TextBlock Text="{Binding Disk2}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+
+        <!-- LINE TUTORIAL-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border BorderBrush="Black" BorderThickness="1">
+                <Viewbox Stretch="Fill">
+                    <Canvas x:Name="_canvas" Background="White" Width="1200" Height="299" >
+                        <Line Stroke="{StaticResource poleFill}" StrokeThickness="40" X1="200" Y1="0" X2="200" Y2="300" />
+                        <Line Stroke="{StaticResource poleFill}" StrokeThickness="40" X1="600" Y1="0" X2="600" Y2="300" />
+                        <Line Stroke="{StaticResource poleFill}" StrokeThickness="40" X1="1000" Y1="0" X2="1000" Y2="300" />
+                    </Canvas>
+                </Viewbox>
+            </Border>
         </Grid>
-
-        <Grid Margin="10">
-            <ItemsControl Name="icTodoList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,0,0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="100" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Title}" />
-                            <ProgressBar Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding Completion}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
-
-
     </StackPanel>
 
 

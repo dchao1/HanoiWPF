@@ -42,8 +42,10 @@ namespace WpfApp1
         string towersCount = "";
         //Towers of Hanoi
         Hanoi HanoiObj;
+        int turnsTaken = 0; //just used for display purposes; used to calculate turn max. please delete if the text display is gone
+        int totalTowers; //just used for display purposes; used to calculate turn max. please delete if the text display is gone
 
-    public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
 
@@ -52,31 +54,62 @@ namespace WpfApp1
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             //Default Initialize the Hanoi Tower
+            totalTowers = 3;
             HanoiObj = new Hanoi(3);
             Display_Towers_Status_Message(null, null);
 
-            //Set up an automatically updating Hanoi Tower view
-            var myTowers0 = new int[] { 3, 2, 1 };//HanoiObj.Towers[0].ToArray();
-            var myTowers1 = new int[] { 5, 3, 4 };//HanoiObj.Towers[1].ToArray();
-            int[] myTowers2 = new int[] { 0, 0, 0 };//HanoiObj.Towers[2].ToArray();
+            //Update visual display with our HanoiObj
+            UpdateTowersWithHanoi();
+        }
 
-            List<TowerObject> ListOfTowers = new List<TowerObject>
+        //Function that will take the current HanoiObj
+        //Then make the three Tower Display Objects reflect that
+        public void UpdateTowersWithHanoi()
+        {
+            //Clear the Canvas of the old disks
+            _canvas.Children.RemoveRange(3, _canvas.Children.Count - 3);
+
+            //Get the stack
+            Stack<int>[] towers = HanoiObj.Towers;
+
+            //This height will be used for each of the three towers, reflecting the height of that specific tower
+            //We need this to iterate through the array this number of times
+            int thisTowerHeight = 0;
+            
+            //For each of our THREE towers
+            for (int i = 0; i < 3; i++)
             {
-                new TowerObject { Disk0 = myTowers0[0], Disk1 = myTowers0[1], Disk2 = myTowers0[2] },
-                new TowerObject { Disk0 = myTowers1[0], Disk1 = myTowers1[1], Disk2 = myTowers1[2] },
-                new TowerObject { Disk0 = myTowers2[0], Disk1 = myTowers2[1], Disk2 = myTowers2[2] }
-            };
+                //Get the {i}th Tower to work with for this loop iteration
+                int[] towersArray = towers[i].ToArray();
+                Array.Reverse(towersArray);
+                thisTowerHeight = towers[i].Count();
 
-            icTowersList.ItemsSource = ListOfTowers;
+                //Just some values
+                double diskHeight = 60;
+                double currentTowerCenter = 200 + i * 400; //200 / 600 / 1000 are the center of the pillars
+                double WidthMultiplier = 80; //if disk is size 3, width will be 80*3
 
+                //now we have the tower Array-ified. We run through the array and generate disks as appropriate, then display the disks
+                for (int j = 0; j < thisTowerHeight; j++)
+                {
+                    //first add the disk
+                    int thisDiskContent = towersArray[j];
+                    double width = WidthMultiplier*thisDiskContent;
+                    var disc = new DiscControl
+                    {
+                        Text = (thisDiskContent).ToString(),
+                        FontSize = 30,
+                        Width = width,
+                        Height = 30,
+                        Foreground = Brushes.White
+                    };
+                    _canvas.Children.Add(disc);
 
-            List<TodoItem> items = new List<TodoItem>();
-            items.Add(new TodoItem() { Title = "Complete this WPF tutorial", Completion = 45 });
-            items.Add(new TodoItem() { Title = "Learn C#", Completion = 80 });
-            items.Add(new TodoItem() { Title = "Wash the car", Completion = 0 });
-
-            icTodoList.ItemsSource = items;
-
+                    //re-center the disk to the appropriate spot
+                    Canvas.SetLeft(disc, currentTowerCenter - width / 2);
+                    Canvas.SetBottom(disc, j*diskHeight); //each disk will be (disks on tower * diskHeight) above 0 to be appropriate
+                }
+            }
         }
 
         // When the button is clicked it closes the window
@@ -89,6 +122,7 @@ namespace WpfApp1
             {
                 HanoiObj.MoveDisks();
                 Display_Towers_Status_Message(sender, e);
+                UpdateTowersWithHanoi();
             }
             //else, just say we already solved the game
             else MessageBox.Show("You have solved the Towers !");
@@ -111,8 +145,11 @@ namespace WpfApp1
             {
                 MessageBox.Show($"Generating {num} towers");
                 //Generate a new tower and display
+                totalTowers = num;
+                turnsTaken = 0;
                 HanoiObj = new Hanoi(num);
                 Display_Towers_Status_Message(sender, e);
+                UpdateTowersWithHanoi();
             }
             else MessageBox.Show($"{towersCount} is not a valid number");
 
@@ -128,9 +165,9 @@ namespace WpfApp1
             //for each of the three towers, make a string
             //then eventually, display the whole thing in a message box
             //for now; until we make a more visual setup
-
+            
             //eventually this string logic will be converted to just update a more visual display directly
-            String completeString = "";
+            String completeString = $"Turns Taken: {turnsTaken}/{Math.Pow (2, totalTowers)-1}\r\n";
             for (int i = 0; i < 3; i++)
             {
                 completeString += $"Tower {i + 1} contains these disks: ";
@@ -138,10 +175,10 @@ namespace WpfApp1
                 completeString += string.Join(" ", myArray);
                 completeString += "\r\n";
             }
+            turnsTaken++;
 
             //display the messagebox
             TowersSolution.Text = completeString;
-            //MessageBox.Show(completeString);
         }
 
     }
